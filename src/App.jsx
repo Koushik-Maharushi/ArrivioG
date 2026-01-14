@@ -9,6 +9,7 @@ import PropertyDetails from './pages/PropertyDetails';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Employers from './pages/Employers';
+import RoomDetails from './pages/RoomDetails';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/business" element={<Employers />} />
             <Route path="/employers" element={<Employers />} />
+            <Route path="/room/:id" element={<RoomDetails />} />
           </Routes>
         </main>
         <Footer />
