@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cobe": "^0.6.5",
     "framer-motion": "^12.26.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.294.0",

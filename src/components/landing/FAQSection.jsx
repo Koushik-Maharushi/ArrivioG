@@ -12,12 +12,12 @@ const faqs = [
     answer: "We offer flexible living arrangements to suit your lifestyle. Memberships start at a minimum of 3 months, but most of our members choose to stay for 12 months or longer to fully immerse themselves in the community."
   },
   {
-    question: "Is ARRIVIO pet-friendly?",
+    question: "Is Arrivio pet-friendly?",
     answer: "Yes, we love pets! Specific locations have designated pet-friendly floors and amenities. There is a small additional monthly fee for furry friends to cover deep cleaning services."
   },
   {
     question: "Can I transfer between locations?",
-    answer: "Absolutely. One of the biggest perks of ARRIVIO is the ability to move seamlessly between our cities. As a member, you have priority access to transfer your lease to any of our other locations with just 30 days' notice."
+    answer: "Absolutely. One of the biggest perks of Arrivio is the ability to move seamlessly between our cities. As a member, you have priority access to transfer your lease to any of our other locations with just 30 days' notice."
   },
   {
     question: "Is there a deposit required?",
@@ -27,28 +27,36 @@ const faqs = [
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
-    <div className="border-b border-warmSand/50 last:border-none">
+    <div className="border-b border-[#2C3E30]/10 last:border-none">
       <button
         onClick={onClick}
         className="w-full py-6 flex items-center justify-between text-left focus:outline-none group"
       >
-        <span className={`text-lg md:text-xl font-heading font-medium transition-colors duration-300 ${isOpen ? 'text-forestGreen' : 'text-charcoal group-hover:text-forestGreen'}`}>
+        <span className={`text-lg md:text-xl font-serif transition-colors duration-300 ${isOpen ? 'text-[#2C3E30]' : 'text-[#1A1A1A] group-hover:text-[#2C3E30]'}`}>
           {question}
         </span>
-        <span className={`ml-4 flex-shrink-0 transition-colors duration-300 ${isOpen ? 'text-forestGreen' : 'text-mutedGold'}`}>
-          {isOpen ? <Minus size={24} /> : <Plus size={24} />}
+        
+        {/* Animated Icon Container */}
+        <span className={`ml-4 flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300 ${isOpen ? 'bg-[#2C3E30] text-[#EAE8E4]' : 'bg-[#EAE8E4] text-[#2C3E30] group-hover:bg-[#2C3E30]/10'}`}>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+             {isOpen ? <Minus size={16} /> : <Plus size={16} />}
+          </motion.div>
         </span>
       </button>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }} // Premium "Spring-like" ease
             className="overflow-hidden"
           >
-            <p className="pb-6 text-charcoal/80 font-body leading-relaxed max-w-3xl">
+            <p className="pb-8 pt-2 text-[#5C5C50] font-sans leading-relaxed max-w-3xl text-base md:text-lg">
               {answer}
             </p>
           </motion.div>
@@ -59,23 +67,49 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
 };
 
 const FAQSection = () => {
-  // FIX: -1 ensures no item is open by default
   const [openIndex, setOpenIndex] = useState(-1);
 
   return (
-    <section className="py-20 bg-softWhite" id="faq">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    // Background: Warm Stone (#EAE8E4)
+    <section id="faq" className="py-24 bg-[#EAE8E4] px-4 sm:px-6 lg:px-8">
+      
+      <div className="max-w-4xl mx-auto">
+        
+        {/* --- HEADER --- */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-forestGreen mb-4">
-            Common Questions
-          </h2>
-          <p className="text-charcoal/70 font-body text-lg">
-            Everything you need to know about life at ARRIVIO.
-          </p>
+           <motion.div 
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             className="inline-flex items-center gap-3 mb-6 opacity-60"
+           >
+              <div className="w-8 h-[1px] bg-[#2C3E30]"></div>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#2C3E30] font-sans">
+                 Need to Know
+              </span>
+              <div className="w-8 h-[1px] bg-[#2C3E30]"></div>
+           </motion.div>
+
+           <motion.h2 
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.1 }}
+             className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#1A1A1A] leading-tight mb-4"
+           >
+              Frequently Asked <br/>
+              <span className="italic text-[#2C3E30]">Questions.</span>
+           </motion.h2>
         </div>
         
-        {/* Accordion Container */}
-        <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-sm border border-warmSand/30 p-6 md:p-8">
+        {/* --- GLASS ACCORDION CONTAINER --- */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="bg-[#F5F5F0]/60 backdrop-blur-md rounded-[2rem] shadow-sm border border-white/60 p-6 md:p-10"
+        >
           {faqs.map((faq, index) => (
             <FAQItem
               key={index}
@@ -85,7 +119,8 @@ const FAQSection = () => {
               onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
             />
           ))}
-        </div>
+        </motion.div>
+
       </div>
     </section>
   );

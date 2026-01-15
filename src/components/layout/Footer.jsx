@@ -1,89 +1,124 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Instagram, Linkedin, Twitter, ArrowUpRight, Globe, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Instagram, Twitter, Linkedin, Mail, MapPin } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const footerLinks = {
+    Company: [
+      { name: 'Our Vision', path: '/vision' },
+      { name: 'Community', path: '/community' },
+      { name: 'Careers', path: '/careers' },
+      { name: 'Contact', path: '/contact' },
+    ],
+    Locations: [
+      { name: 'Berlin', path: '/search' },
+      { name: 'Munich', path: '/search' },
+      { name: 'Frankfurt', path: '/search' },
+      { name: 'Cologne', path: '/search' },
+    ],
+    Legal: [
+      { name: 'Privacy Policy', path: '/privacy' },
+      { name: 'Terms of Service', path: '/terms' },
+      { name: 'Imprint', path: '/imprint' },
+    ],
+  };
+
   return (
-    // Reduced padding (pt-16 pb-8) and subtler curve (rounded-t-[30px])
-    <footer className="bg-forestGreen text-white pt-16 pb-8 rounded-t-[30px] mt-[-30px] relative z-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    // Background: Deep Forest Green (#1A2E22) for a bossy, grounded finish
+    <footer className="relative bg-[#1A2E22] pt-24 pb-12 px-6 md:px-12 overflow-hidden text-[#EAE8E4]">
+      
+      {/* 1. THE BRAND WATERMARK (Subtle & Premium) */}
+      <div className="absolute bottom-[-10%] right-[-5%] font-serif text-[15rem] md:text-[25rem] opacity-[0.03] select-none pointer-events-none leading-none">
+        Arrivio
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Main Content - Tightened Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-10 border-b border-white/10 pb-10">
+        {/* --- TOP SECTION: BRAND & LINKS --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24">
           
-          {/* Brand Column - Takes up 4 columns */}
-          <div className="md:col-span-4">
-            <Link to="/" className="text-2xl font-heading font-bold tracking-tight mb-4 block text-white">
-              ARRIVIO
-            </Link>
-            <p className="text-white/60 text-sm leading-relaxed mb-6 font-body max-w-xs">
-              Flexible, furnished co-living spaces designed for the modern generation. Move in, meet people, and feel at home.
-            </p>
-            <div className="flex gap-3">
-              <a href="#" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-warmSand hover:text-forestGreen transition-all">
-                <Instagram size={16} />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-warmSand hover:text-forestGreen transition-all">
-                <Twitter size={16} />
-              </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-warmSand hover:text-forestGreen transition-all">
-                <Linkedin size={16} />
-              </a>
-            </div>
+          {/* Left: Brand & Newsletter */}
+          <div className="lg:col-span-5">
+             <div className="mb-8">
+                <h2 className="font-serif text-4xl mb-4">Arrivio.</h2>
+                <p className="font-sans text-[#EAE8E4]/60 text-lg max-w-sm leading-relaxed">
+                   Redefining belonging for the global citizen. Stability is the ultimate luxury.
+                </p>
+             </div>
+
+             {/* Newsletter Sign-up */}
+             <div className="max-w-md">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-4 text-[#C2B280]">
+                   Join our inner circle
+                </p>
+                <div className="relative group">
+                   <input 
+                     type="email" 
+                     placeholder="Email address"
+                     className="w-full bg-transparent border-b border-[#EAE8E4]/20 py-4 outline-none focus:border-[#C2B280] transition-colors font-serif italic text-xl"
+                   />
+                   <button className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-[#EAE8E4]/20 flex items-center justify-center hover:bg-[#EAE8E4] hover:text-[#1A2E22] transition-all">
+                      <ArrowUpRight size={18} />
+                   </button>
+                </div>
+             </div>
           </div>
 
-          {/* Spacer Column */}
-          <div className="hidden md:block md:col-span-1"></div>
-
-          {/* Link Columns - Evenly distributed */}
-          <div className="md:col-span-2">
-            <h4 className="font-heading font-bold text-base mb-4 text-warmSand">Explore</h4>
-            <ul className="space-y-2 font-body text-sm">
-              <li><Link to="/search" className="text-white/70 hover:text-white transition-colors">Find a Home</Link></li>
-              <li><a href="#living-spaces" className="text-white/70 hover:text-white transition-colors">How it Works</a></li>
-              <li><a href="#community" className="text-white/70 hover:text-white transition-colors">Community</a></li>
-              <li><a href="#stories" className="text-white/70 hover:text-white transition-colors">Stories</a></li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-2">
-            <h4 className="font-heading font-bold text-base mb-4 text-warmSand">Company</h4>
-            <ul className="space-y-2 font-body text-sm">
-              <li><Link to="/about" className="text-white/70 hover:text-white transition-colors">About Us</Link></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">Careers</a></li>
-              <li><a href="#" className="text-white/70 hover:text-white transition-colors">Press</a></li>
-              <li><Link to="/contact" className="text-white/70 hover:text-white transition-colors">Contact</Link></li>
-            </ul>
-          </div>
-
-          <div className="md:col-span-3">
-            <h4 className="font-heading font-bold text-base mb-4 text-warmSand">Get in Touch</h4>
-            <ul className="space-y-3 font-body text-sm">
-              <li className="flex items-start gap-3 text-white/70">
-                <Mail size={16} className="mt-0.5 flex-shrink-0 text-warmSand" />
-                <span>hello@arrivio.de</span>
-              </li>
-              <li className="flex items-start gap-3 text-white/70">
-                <MapPin size={16} className="mt-0.5 flex-shrink-0 text-warmSand" />
-                <span>
-                  Musterstraße 123<br />
-                  10115 Berlin, Germany
-                </span>
-              </li>
-            </ul>
+          {/* Right: Sitemap Links */}
+          <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
+             {Object.entries(footerLinks).map(([title, links]) => (
+                <div key={title}>
+                   <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] mb-8 text-[#C2B280]">
+                      {title}
+                   </h4>
+                   <ul className="space-y-4">
+                      {links.map((link) => (
+                         <li key={link.name}>
+                            <Link 
+                              to={link.path} 
+                              className="text-sm font-sans text-[#EAE8E4]/60 hover:text-[#EAE8E4] transition-colors flex items-center gap-1 group"
+                            >
+                               {link.name}
+                               <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </Link>
+                         </li>
+                      ))}
+                   </ul>
+                </div>
+             ))}
           </div>
         </div>
 
-        {/* Bottom Bar - Compact */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40 font-body">
-          <p>&copy; {currentYear} ARRIVIO GmbH.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Imprint</a>
-          </div>
+
+        {/* --- BOTTOM SECTION: LEGAL & SOCIAL --- */}
+        <div className="pt-12 border-t border-[#EAE8E4]/10 flex flex-col md:flex-row justify-between items-center gap-8">
+           
+           {/* Copyright */}
+           <div className="flex flex-col md:flex-row items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-[#EAE8E4]/40">
+              <span>© {currentYear} Arrivio Living GmbH</span>
+              <div className="hidden md:block w-1 h-1 bg-[#C2B280] rounded-full"></div>
+              <div className="flex items-center gap-2">
+                 <Globe size={12} />
+                 <span>Headquarters: Berlin, Germany</span>
+              </div>
+           </div>
+
+           {/* Social Links */}
+           <div className="flex items-center gap-6">
+              <a href="#" className="w-10 h-10 rounded-full border border-[#EAE8E4]/10 flex items-center justify-center hover:bg-[#EAE8E4]/5 transition-colors">
+                 <Instagram size={18} />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full border border-[#EAE8E4]/10 flex items-center justify-center hover:bg-[#EAE8E4]/5 transition-colors">
+                 <Linkedin size={18} />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full border border-[#EAE8E4]/10 flex items-center justify-center hover:bg-[#EAE8E4]/5 transition-colors">
+                 <Twitter size={18} />
+              </a>
+           </div>
+
         </div>
 
       </div>
