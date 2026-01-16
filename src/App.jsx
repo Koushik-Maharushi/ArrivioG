@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
+import CityGridPage from './components/search/CityGridPage';
 import Landing from './pages/Landing';
 import Search from './pages/Search';
 import PropertyDetails from './pages/PropertyDetails';
@@ -27,6 +28,8 @@ function App() {
             <Route path="/business" element={<Employers />} />
             <Route path="/employers" element={<Employers />} />
             <Route path="/room/:id" element={<RoomDetails />} />
+            <Route path="/cities" element={<CityGridPage />} />
+            
           </Routes>
         </main>
         <Footer />

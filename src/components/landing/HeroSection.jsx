@@ -1,170 +1,168 @@
-import React, { useState } from 'react';
-import { Search, ArrowRight, Anchor, ChevronDown } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ArrowRight, Star, MapPin, Briefcase, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// ... Imports remain the same ...
-import heroVideo1 from '../../assets/hero/video1.mp4';
-import heroImage1 from '../../assets/hero/image1.jpeg';
-import heroImage2 from '../../assets/hero/image2.jpeg';
+// --- IMPORTS ---
+import heroVideo1 from '../../assets/hero/video1.mp4'; 
 import heroVideo2 from '../../assets/hero/video2.mp4';
 import heroVideo3 from '../../assets/hero/video3.mp4';
-import heroImage3 from '../../assets/hero/image3.png';
-import heroImage4 from '../../assets/hero/image4.png';
-import heroImage5 from '../../assets/hero/image5.jpeg';
 import heroVideo5 from '../../assets/hero/video5.mp4';
 import heroVideo6 from '../../assets/hero/video6.mp4';
 import heroVideo7 from '../../assets/hero/video7.mp4';
 
-const scrollStyles = `
-  @keyframes scroll-up {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
-  }
-  @keyframes scroll-down {
-    0% { transform: translateY(-50%); }
-    100% { transform: translateY(0); }
-  }
-  .animate-col-1 { animation: scroll-up 60s linear infinite; will-change: transform; }
-  .animate-col-2 { animation: scroll-down 45s linear infinite; will-change: transform; }
-  .animate-col-3 { animation: scroll-up 55s linear infinite; will-change: transform; }
-  
-  .animate-pulse-soft { 
-    animation: pulse-soft 3s ease-in-out infinite; 
-  }
-  @keyframes pulse-soft {
-    0%, 100% { opacity: 0.4; transform: translateY(0); }
-    50% { opacity: 1; transform: translateY(8px); }
-  }
-`;
-
 const HeroSection = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  
+  // --- TWIN PLAYER STATE ---
+  const [activePlayer, setActivePlayer] = useState(0); 
+  const [playOrder, setPlayOrder] = useState(0);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    navigate('/search');
+  const player1Ref = useRef(null);
+  const player2Ref = useRef(null);
+
+  const playlist = [
+    heroVideo3, heroVideo7, heroVideo2, heroVideo1, heroVideo5, heroVideo6
+  ];
+
+  const handleExplore = () => {
+    navigate('/cities');
   };
 
-  const col1_data = [
-    { type: 'video', url: heroVideo1 },
-    { type: 'image', url: heroImage2 },
-    { type: 'image', url: heroImage5 },
-    { type: 'video', url: heroVideo6 },
-    { type: 'video', url: heroVideo3 },
-    { type: 'image', url: heroImage3 },
-    { type: 'image', url: heroImage4 },
-    { type: 'video', url: heroVideo7 },
-  ];
-  
-  const col2_data = [
-    { type: 'image', url: heroImage3 },
-    { type: 'video', url: heroVideo7 },
-    { type: 'image', url: heroImage4 },
-    { type: 'video', url: heroVideo1 },
-    { type: 'video', url: heroVideo5 },
-    { type: 'image', url: heroImage1 },
-    { type: 'image', url: heroImage2 },
-    { type: 'video', url: heroVideo2 },
-  ];
+  const getVideoClass = (src) => {
+    return src === heroVideo7 ? 'object-center' : 'object-top';
+  };
 
-  const col3_data = [
-    { type: 'video', url: heroVideo3 },
-    { type: 'image', url: heroImage5 },
-    { type: 'video', url: heroVideo2 },
-    { type: 'image', url: heroImage2 },
-    { type: 'video', url: heroVideo6 },
-    { type: 'image', url: heroImage4 },
-    { type: 'video', url: heroVideo7 },
-    { type: 'image', url: heroImage1 },
-  ];
+  const handleVideoEnded = () => {
+    const nextPlayer = activePlayer === 0 ? 1 : 0;
+    const nextRef = nextPlayer === 0 ? player1Ref : player2Ref;
+    if (nextRef.current) {
+        nextRef.current.play().catch(e => console.log("Play interrupted", e));
+    }
+    setActivePlayer(nextPlayer);
+    setPlayOrder(prev => prev + 1);
+  };
 
-  const col1 = [...col1_data, ...col1_data];
-  const col2 = [...col2_data, ...col2_data];
-  const col3 = [...col3_data, ...col3_data];
-
-  const RenderMedia = ({ item, index }) => (
-    <div className={`w-full h-32 md:h-80 overflow-hidden rounded-[40px] md:rounded-[120px] bg-stone-200`}>
-      {item.type === 'video' ? (
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover">
-          <source src={item.url} type="video/mp4" />
-        </video>
-      ) : (
-        <img src={item.url} className="w-full h-full object-cover" alt="" loading="lazy" />
-      )}
-    </div>
-  );
+  const getSrcForPlayer = (playerId) => {
+    const currentPlaylistIndex = playOrder % playlist.length;
+    const nextPlaylistIndex = (playOrder + 1) % playlist.length;
+    return playerId === activePlayer ? playlist[currentPlaylistIndex] : playlist[nextPlaylistIndex];
+  };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#EAE8E4] flex flex-col items-center justify-center pt-24 lg:pt-28">
-      <style>{scrollStyles}</style>
+    <div className="relative min-h-screen w-full bg-[#EAE8E4] flex flex-col items-center justify-center pt-24 pb-12 px-4 md:px-8 overflow-hidden">
+      
+      {/* HEADER */}
+      <div className="text-center mb-8 md:mb-12 z-10">
+        
+        {/* TAG */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#2C3E30]/20 text-[#2C3E30] mb-6">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="text-[10px] font-bold uppercase tracking-widest">Live in Germany</span>
+        </div>
 
-      {/* --- 1. BACKGROUND MEDIA LAYER (Lower Z-Index) --- */}
-      <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 px-2 md:px-4 opacity-60 z-0">
-        <div className="animate-col-1 flex flex-col gap-3 md:gap-8 -mt-20">
-          {col1.map((item, i) => <RenderMedia key={`c1-${i}`} item={item} index={i} />)}
-        </div>
-        <div className="animate-col-2 flex flex-col gap-3 md:gap-8 -mt-20">
-          {col2.map((item, i) => <RenderMedia key={`c2-${i}`} item={item} index={i} />)}
-        </div>
-        <div className="animate-col-3 flex-col gap-3 md:gap-8 -mt-20 hidden md:flex">
-          {col3.map((item, i) => <RenderMedia key={`c3-${i}`} item={item} index={i} />)}
-        </div>
+        <h1 className="text-[#1A1A1A] leading-tight">
+            <span className="block font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight">
+                Relocation, <span className="italic text-[#2C3E30]">Refined.</span>
+            </span>
+        </h1>
+        <p className="font-sans text-sm md:text-base text-[#1A1A1A]/60 mt-4 max-w-lg mx-auto font-medium">
+            We acquire, furnish, and manage homes so you don't have to. <br className="hidden md:block" />
+            The modern standard for international living.
+        </p>
       </div>
 
-      {/* --- 2. THE MERGE ZONES (Increased Opacity & Height) --- */}
-      {/* Top shade - increased height and opacity to hide the video edges */}
-      <div className="absolute top-0 left-0 w-full h-[20vh] bg-gradient-to-b from-[#EAE8E4] via-[#EAE8E4]/50 to-transparent z-10 pointer-events-none" />
-      
-      {/* Bottom shade - increased height and opacity to merge with next section */}
-      <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-[#EAE8E4] via-[#EAE8E4]/100 to-transparent z-10 pointer-events-none" />
+      {/* LEVITATING MONOLITH */}
+      <div className="relative w-full max-w-5xl h-[60vh] md:h-[75vh] z-10 group">
+        <div className="absolute -inset-2 bg-[#2C3E30]/30 blur-[80px] rounded-[60px] opacity-100 -z-20"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] bg-white/40 blur-[80px] -z-10"></div>
 
-      {/* --- 3. FOREGROUND CONTENT (Higher Z-Index) --- */}
-      <div className="relative z-20 w-full max-w-5xl px-4 text-center">
-        <div className="relative inline-block mb-6 md:mb-8 w-full">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[95%] bg-[#EAE8E4]/40 blur-[40px] rounded-full -z-10"></div>
-            <h1 className="mb-2 md:mb-3 text-[#1A1A1A]">
-              <span className="block font-sans text-xs md:text-2xl font-bold uppercase tracking-[0.3em] mb-1 md:mb-3 text-[#2C3E30]">
-                The Art of
-              </span>
-              <span className="block font-serif text-5xl md:text-8xl lg:text-9xl leading-[0.9] text-[#1A1A1A]">
-                Staying.
-              </span>
-            </h1>
-            <div className="relative inline-block">
-                <span className="absolute inset-x-[-20%] inset-y-[-50%] bg-[#EAE8E4]/40 blur-2xl -z-10 rounded-full"></span>
-                <p className="font-sans text-sm md:text-xl text-[#1A1A1A] max-w-xs md:max-w-xl mx-auto leading-relaxed font-bold">
-                    Start your next chapter in a city you've yet to meet. <br className="hidden md:block" /> 
-                    We provide the <span className="italic font-serif text-[#2C3E30]">roots</span>, so you can focus on growing.
-                </p>
+        <div className="w-full h-full rounded-[40px] md:rounded-[60px] overflow-hidden shadow-2xl bg-black relative border-[1px] border-white/30">
+            {/* PLAYERS */}
+            <div className={`absolute inset-0 transition-opacity duration-0 ${activePlayer === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+                <video ref={player1Ref} src={getSrcForPlayer(0)} autoPlay={activePlayer === 0} muted playsInline onEnded={() => { if(activePlayer === 0) handleVideoEnded() }} className={`w-full h-full object-cover ${getVideoClass(getSrcForPlayer(0))} opacity-95`} />
+            </div>
+            <div className={`absolute inset-0 transition-opacity duration-0 ${activePlayer === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+                <video ref={player2Ref} src={getSrcForPlayer(1)} muted playsInline onEnded={() => { if(activePlayer === 1) handleVideoEnded() }} className={`w-full h-full object-cover ${getVideoClass(getSrcForPlayer(1))} opacity-95`} />
+            </div>
+            
+            {/* GRADIENT OVERLAY */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/90 via-transparent to-transparent pointer-events-none z-20"></div>
+
+            {/* CONTROL DECK */}
+            <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 flex flex-col-reverse md:flex-row items-center justify-between gap-6 z-30">
+                
+                {/* --- NEW LEFT CORNER: STATUS INDICATOR --- */}
+                {/* Hidden on very small screens if needed, or kept for context */}
+                <div className="hidden md:flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">System Status: Online</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
+                        <CheckCircle size={12} className="text-green-400" />
+                        <span className="text-xs text-white/80 font-medium">850+ Verified Listings</span>
+                    </div>
+                </div>
+
+                {/* --- RIGHT CORNER: EXPLORE BUTTON --- */}
+                <div className="w-full md:w-auto">
+                    <button 
+                        onClick={handleExplore} 
+                        className="
+                            w-full md:w-auto
+                            group relative flex items-center justify-between gap-6 
+                            
+                            /* WARM STONE STYLE */
+                            bg-[#EAE8E4] 
+                            hover:bg-white
+                            text-[#1A1A1A] 
+                            
+                            px-6 py-3 md:pl-8 md:pr-3 
+                            rounded-full 
+                            shadow-xl hover:shadow-2xl 
+                            transition-all duration-300 hover:scale-[1.02] active:scale-95
+                        "
+                    >
+                        <div className="flex flex-col items-start text-left">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2C3E30]/80">Next Step</span>
+                            <span className="text-lg font-serif italic text-[#1A1A1A]">Explore Cities</span>
+                        </div>
+                        
+                        <div className="w-10 h-10 rounded-full bg-[#2C3E30] flex items-center justify-center text-white group-hover:rotate-45 transition-transform duration-500 shadow-sm">
+                            <ArrowRight size={18} />
+                        </div>
+                    </button>
+                </div>
+
             </div>
         </div>
-
-        {/* --- SEARCH & TRUST GROUP --- */}
-        <div className="max-w-lg mx-auto relative group mb-6 md:mb-8">
-           <form onSubmit={handleSearch} className="relative flex items-center bg-white border border-white shadow-2xl p-1.5 md:p-2 pr-2 rounded-full hover:border-[#2C3E30]/20 transition-all">
-             <div className="pl-4 md:pl-6 pr-2 md:pr-4 text-[#2C3E30]"><Search size={18} className="md:w-6 md:h-6 opacity-80" /></div>
-             <input 
-               type="text" 
-               placeholder="Where do you belong?"
-               className="w-full bg-transparent border-none py-3 md:py-4 text-[#1A1A1A] placeholder-[#4A4A40]/50 focus:outline-none text-base md:text-lg font-serif italic font-medium"
-               value={searchQuery}
-               onChange={(e) => setSearchQuery(e.target.value)}
-             />
-             <button type="submit" className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#2C3E30] text-[#EAE8E4] flex items-center justify-center hover:bg-[#1A1A1A] transition-all active:scale-95">
-               <ArrowRight size={18} className="md:w-5 md:h-5" />
-             </button>
-           </form>
-           <div className="mt-3 inline-flex items-center gap-2 bg-white/60 backdrop-blur-md border border-white/50 px-5 py-1.5 shadow-sm rounded-full">
-               <Anchor size={12} className="text-[#2C3E30]" />
-               <span className="text-[9px] md:text-[10px] font-bold text-[#2C3E30] uppercase tracking-[0.2em]">Verified Long-Term Residences</span>
-           </div>
-        </div>
-
-        <div className="mt-6 md:mt-8 flex flex-col items-center gap-2 animate-pulse-soft">
-           <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-[#2C3E30]/60">Explore Berlin • Munich • Frankfurt • Cologne</p>
-           <ChevronDown size={20} strokeWidth={1} className="text-[#2C3E30]/40" />
-        </div>
+      </div>
+      
+      {/* FOOTER METRICS */}
+      <div className="w-full max-w-4xl flex justify-between items-center border-t border-[#2C3E30]/10 pt-6 mt-12 opacity-80">
+          <div className="flex items-center gap-3">
+              <div className="p-2 bg-white rounded-full text-[#2C3E30] shadow-sm"><Briefcase size={14} /></div>
+              <div>
+                  <span className="block text-[14px] font-serif font-bold text-[#1A1A1A]">850+</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/60">Relocations</span>
+              </div>
+          </div>
+          <div className="w-[1px] h-8 bg-[#2C3E30]/10"></div>
+          <div className="flex items-center gap-3">
+              <div className="p-2 bg-white rounded-full text-[#2C3E30] shadow-sm"><MapPin size={14} /></div>
+              <div>
+                  <span className="block text-[14px] font-serif font-bold text-[#1A1A1A]">7 Major</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/60">German Cities</span>
+              </div>
+          </div>
+          <div className="w-[1px] h-8 bg-[#2C3E30]/10"></div>
+          <div className="flex items-center gap-3">
+              <div className="p-2 bg-white rounded-full text-[#2C3E30] shadow-sm"><Star size={14} /></div>
+              <div>
+                  <span className="block text-[14px] font-serif font-bold text-[#1A1A1A]">4.9/5</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/60">Talent Rating</span>
+              </div>
+          </div>
       </div>
     </div>
   );

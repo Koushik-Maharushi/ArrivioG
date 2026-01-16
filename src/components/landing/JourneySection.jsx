@@ -3,13 +3,9 @@ import { motion } from 'framer-motion';
 import { Search, FileCheck, Home, Heart, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// --- RESTORE YOUR IMAGES HERE ---
-// import journeyImg1 from '../../assets/journeyImg1.jpeg';
-// import journeyImg2 from '../../assets/journeyImg2.png';
-
-// (Using placeholders for demonstration - REPLACE these variables with your imports above)
-const journeyImg1 = "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop";
-const journeyImg2 = "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=800&auto=format&fit=crop";
+// --- YOUR IMAGE IMPORTS ---
+import journeyImg1 from '../../assets/journeyImg1.jpeg';
+import journeyImg2 from '../../assets/journeyImg2.png';
 
 const JourneySection = () => {
   const steps = [
@@ -40,14 +36,13 @@ const JourneySection = () => {
   ];
 
   return (
-    // Background: Warm Stone (#EAE8E4) to match previous sections
     <section id="community" className="bg-[#EAE8E4] py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       
       <div className="max-w-7xl mx-auto">
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
-          {/* --- LEFT COLUMN: THE GLASS STEPS --- */}
+          {/* --- LEFT COLUMN --- */}
           <div className="relative z-10">
              
              {/* Header */}
@@ -55,13 +50,20 @@ const JourneySection = () => {
                initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
-               className="mb-12"
+               // Mobile: Centered text. Desktop: Left aligned text.
+               className="mb-12 text-center lg:text-left"
              >
-                <div className="flex items-center gap-3 mb-6 opacity-60">
+                {/* Responsive Label */}
+                <div className="flex items-center justify-center lg:justify-start gap-3 mb-6 ">
+                   {/* Left Line (Always visible) */}
                    <div className="w-8 h-[1px] bg-[#2C3E30]"></div>
+                   
                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#2C3E30] font-sans">
                       The Process
                    </span>
+                   
+                   {/* Right Line (Visible on Mobile, Hidden on Desktop 'lg:hidden') */}
+                   <div className="w-8 h-[1px] bg-[#2C3E30] lg:hidden"></div>
                 </div>
                 
                 <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#1A1A1A] leading-tight">
@@ -73,7 +75,7 @@ const JourneySection = () => {
              {/* Steps Container */}
              <div className="space-y-4 relative">
                 
-                {/* Connecting Line (The Path) */}
+                {/* Connecting Line */}
                 <div className="absolute left-[27px] top-4 bottom-4 w-[1px] bg-[#2C3E30]/10 z-0 hidden sm:block"></div>
 
                 {steps.map((step, index) => {
@@ -85,10 +87,9 @@ const JourneySection = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
-                      // GLASS PILLAR HOVER EFFECT
-                      className="group relative flex gap-6 p-6 rounded-2xl transition-all duration-500 hover:bg-[#F5F5F0]/60 hover:backdrop-blur-md hover:shadow-lg hover:border-white/50 border border-transparent"
+                      className="group relative flex gap-6 p-6 rounded-2xl transition-all duration-500 hover:bg-[#F5F5F0]/60 hover:backdrop-blur-md hover:shadow-lg hover:border-white/50 border border-transparent text-left"
                     >
-                       {/* Number/Icon Container */}
+                       {/* Number/Icon */}
                        <div className="flex-shrink-0 relative z-10">
                           <div className="w-14 h-14 rounded-full bg-[#EAE8E4] border border-[#2C3E30]/10 flex items-center justify-center text-[#2C3E30] group-hover:bg-[#2C3E30] group-hover:text-[#EAE8E4] transition-all duration-500 shadow-sm">
                              <span className="font-mono font-bold text-sm absolute -top-1 -right-1 bg-[#C2B280] text-white w-5 h-5 flex items-center justify-center rounded-full text-[10px]">
@@ -98,7 +99,7 @@ const JourneySection = () => {
                           </div>
                        </div>
 
-                       {/* Text Content */}
+                       {/* Text */}
                        <div className="flex-1 pt-1">
                           <h3 className="font-serif text-2xl text-[#1A1A1A] mb-2 group-hover:text-[#2C3E30] transition-colors">
                              {step.title}
@@ -118,7 +119,8 @@ const JourneySection = () => {
                whileInView={{ opacity: 1 }}
                viewport={{ once: true }}
                transition={{ delay: 0.4 }}
-               className="mt-12 pl-6"
+               // Mobile: Centered button. Desktop: Left aligned button.
+               className="mt-12 flex justify-center lg:justify-start lg:pl-6"
              >
                <Link to="/search">
                   <button className="h-14 px-8 bg-[#2C3E30] text-[#EAE8E4] rounded-full font-sans font-bold text-xs uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-[#1A1A1A] hover:scale-105 transition-all shadow-xl">
@@ -131,10 +133,8 @@ const JourneySection = () => {
           </div>
 
 
-          {/* --- RIGHT COLUMN: THE ARCHITECTURAL COLLAGE --- */}
+          {/* --- RIGHT COLUMN --- */}
           <div className="relative h-[600px] hidden lg:block">
-             
-             {/* Image 1 (Back/Top) */}
              <motion.div
                initial={{ opacity: 0, y: 50 }}
                whileInView={{ opacity: 1, y: 0 }}
@@ -142,16 +142,10 @@ const JourneySection = () => {
                transition={{ duration: 0.8 }}
                className="absolute top-0 right-0 w-[80%] h-[60%] rounded-[2rem] overflow-hidden shadow-xl border-4 border-[#F5F5F0] z-10"
              >
-                <img 
-                  src={journeyImg1} 
-                  alt="Interior space" 
-                  className="w-full h-full object-cover grayscale-[10%]"
-                />
-                {/* Earth Tone Tint */}
+                <img src={journeyImg1} alt="Interior space" className="w-full h-full object-cover grayscale-[10%]" />
                 <div className="absolute inset-0 bg-[#2C3E30] mix-blend-multiply opacity-20"></div>
              </motion.div>
              
-             {/* Image 2 (Front/Bottom) */}
              <motion.div
                initial={{ opacity: 0, y: 50 }}
                whileInView={{ opacity: 1, y: 0 }}
@@ -159,27 +153,16 @@ const JourneySection = () => {
                transition={{ duration: 0.8, delay: 0.2 }}
                className="absolute bottom-0 left-0 w-[80%] h-[60%] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-[#F5F5F0] z-20"
              >
-                <img 
-                  src={journeyImg2} 
-                  alt="Interior space" 
-                  className="w-full h-full object-cover"
-                />
-                {/* Earth Tone Tint */}
+                <img src={journeyImg2} alt="Interior space" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-[#2C3E30] mix-blend-multiply opacity-10"></div>
-
-                {/* Decorative Badge */}
                 <div className="absolute top-6 right-6 bg-[#F5F5F0]/90 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 shadow-sm">
                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#2C3E30]">
-                      Move-in Ready
-                   </span>
+                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#2C3E30]">Move-in Ready</span>
                 </div>
              </motion.div>
 
-             {/* Decorative Elements */}
              <div className="absolute top-[40%] left-[10%] w-32 h-32 border border-[#2C3E30]/10 rounded-full -z-0"></div>
              <div className="absolute bottom-[10%] right-[10%] w-20 h-20 bg-[#C2B280]/20 rounded-full blur-2xl -z-0"></div>
-
           </div>
 
         </div>

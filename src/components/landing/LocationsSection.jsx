@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// --- YOUR LOCAL IMAGES (KEPT EXACTLY) ---
+// --- YOUR LOCAL IMAGES ---
 import berlinImg from '../../assets/cities/berlin.jpeg';
 import munichImg from '../../assets/cities/munich.jpeg';
 import frankfurtImg from '../../assets/cities/frankfurt.jpeg';
@@ -26,6 +26,13 @@ const LocationsSection = () => {
   const [activeCityId, setActiveCityId] = useState(1);
   const activeLocation = locations.find(l => l.id === activeCityId);
 
+  // Animation variants for the pop effect
+  const popVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 0.5, scale: 1, transition: { type: "spring", stiffness: 300, damping: 20 } },
+    exit: { opacity: 0, scale: 1.1, transition: { duration: 0.2 } }
+  };
+
   return (
     <section className="py-24 bg-[#EAE8E4] relative overflow-hidden" id="locations">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,11 +43,10 @@ const LocationsSection = () => {
           <div className="order-2 lg:order-1 flex flex-col justify-center">
             
             <motion.div
-               initial={{ opacity: 0, x: -20 }}
-               whileInView={{ opacity: 1, x: 0 }}
-               viewport={{ once: true }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
             >
-              {/* RESTORED COLORS: Forest Green for Main Header, Muted Gold for Highlight */}
               <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#2C3E30] mb-6 leading-tight">
                 Explore our <br />
                 <span className="italic text-[#C2B280]">prime locations</span>
@@ -110,11 +116,14 @@ const LocationsSection = () => {
           <div className="order-1 lg:order-2 relative h-[500px] lg:h-[600px] w-full">
             <div className="absolute inset-0 bg-[#1A1A1A] rounded-[2.5rem] overflow-hidden shadow-2xl border-[6px] border-white">
               
+              {/* --- IMAGE POP ANIMATION --- */}
               <AnimatePresence mode="wait">
                 <motion.div 
                   key={activeCityId}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.5, scale: 1 }} 
+                  variants={popVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
                   className="absolute inset-0 bg-cover bg-center"
                   style={{ backgroundImage: `url(${activeLocation.image})` }}
                 />
@@ -125,7 +134,7 @@ const LocationsSection = () => {
               <div className="relative z-20 w-full h-full flex items-center justify-center">
                 <div className="relative w-full h-full max-w-[360px]">
                   <svg viewBox="0 0 350 500" className="w-full h-full overflow-visible">
-                     <path d="M140,480 L180,490 L220,485 L260,460 L280,420 L320,400 L300,340 L340,300 L320,220 L300,140 L330,80 L260,20 L180,10 L140,30 L90,50 L70,110 L30,140 L10,220 L40,280 L10,350 L40,420 L90,460 Z" className="fill-white/5 stroke-white/20" />
+                      <path d="M140,480 L180,490 L220,485 L260,460 L280,420 L320,400 L300,340 L340,300 L320,220 L300,140 L330,80 L260,20 L180,10 L140,30 L90,50 L70,110 L30,140 L10,220 L40,280 L10,350 L40,420 L90,460 Z" className="fill-white/5 stroke-white/20" />
                   </svg>
 
                   {locations.map((loc) => (
@@ -138,7 +147,6 @@ const LocationsSection = () => {
                       {activeCityId === loc.id ? (
                         <div className="relative flex items-center justify-center">
                           <div className="absolute w-12 h-12 bg-[#C2B280]/20 rounded-full animate-ping"></div>
-                          {/* RESTORED COLOR: Muted Gold for Active Marker */}
                           <MapPin size={28} className="text-[#C2B280] relative z-10 fill-[#C2B280]" />
                         </div>
                       ) : (
@@ -149,10 +157,19 @@ const LocationsSection = () => {
                 </div>
               </div>
 
-              {/* HUD HUD Elements */}
+              {/* HUD Elements */}
               <div className="absolute bottom-8 left-8 z-20">
-                <p className="text-white font-serif font-bold text-3xl mb-1">{activeLocation.name.toUpperCase()}</p>
-                <p className="text-[#C2B280] text-[10px] font-bold uppercase tracking-[0.2em]">Available Now</p>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeLocation.name}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                    >
+                        <p className="text-white font-serif font-bold text-3xl mb-1">{activeLocation.name.toUpperCase()}</p>
+                        <p className="text-[#C2B280] text-[10px] font-bold uppercase tracking-[0.2em]">Available Now</p>
+                    </motion.div>
+                </AnimatePresence>
               </div>
 
             </div>
