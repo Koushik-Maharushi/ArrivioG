@@ -142,8 +142,12 @@ const JourneySection = () => {
                transition={{ duration: 0.8 }}
                className="absolute top-0 right-0 w-[80%] h-[60%] rounded-[2rem] overflow-hidden shadow-xl border-4 border-[#F5F5F0] z-10"
              >
-                <img src={journeyImg1} alt="Interior space" className="w-full h-full object-cover grayscale-[10%]" />
+                <img src={journeyImg2} alt="Interior space" className="w-full h-full object-cover grayscale-[10%]" />
                 <div className="absolute inset-0 bg-[#2C3E30] mix-blend-multiply opacity-20"></div>
+                <div className="absolute top-6 right-6 bg-[#F5F5F0]/90 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 shadow-sm">
+                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#2C3E30]">Move-in Ready</span>
+                </div>
              </motion.div>
              
              <motion.div
@@ -153,12 +157,9 @@ const JourneySection = () => {
                transition={{ duration: 0.8, delay: 0.2 }}
                className="absolute bottom-0 left-0 w-[80%] h-[60%] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-[#F5F5F0] z-20"
              >
-                <img src={journeyImg2} alt="Interior space" className="w-full h-full object-cover" />
+                <img src={journeyImg1} alt="Interior space" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-[#2C3E30] mix-blend-multiply opacity-10"></div>
-                <div className="absolute top-6 right-6 bg-[#F5F5F0]/90 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 shadow-sm">
-                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#2C3E30]">Move-in Ready</span>
-                </div>
+                
              </motion.div>
 
              <div className="absolute top-[40%] left-[10%] w-32 h-32 border border-[#2C3E30]/10 rounded-full -z-0"></div>

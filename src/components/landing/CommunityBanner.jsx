@@ -84,7 +84,7 @@ const CommunityBanner = () => {
       
       {/* --- BACKGROUND LAYERS --- */}
       <div className="absolute inset-0 z-0">
-          <img src={communityBg} alt="Community Vibe" className="w-full h-full object-cover blur-sm opacity-40 grayscale-[30%]" />
+          <img src={communityBg} alt="Community Vibe" className="w-full h-full object-cover blur-sm opacity-90 grayscale-[30%]" />
           <div className="absolute inset-0 bg-[#EAE8E4] mix-blend-color opacity-30"></div>
       </div>
       <div className="absolute inset-0 bg-radial-gradient from-[#F5F5F0]/60 to-transparent opacity-70 pointer-events-none z-10"></div>
